@@ -18,21 +18,20 @@ const App = () => {
       weather && typeof weather === 'string' && weather.length;
   }
 
-  const filterData = (startDate, endDate, location) => {
-    const result = data && data.length ? data.filter((val) => {
-      const valDate = new Date(val.date);
-      if (validateData(valDate, val.town, val.weather)) {
-        return valDate >= (new Date(startDate))
-          && valDate <= (new Date(endDate))
-          && location === val.town
-      }
-      return false;
-    }) : [];
-    return result;
-  }
-
-
   useEffect(() => {
+    const filterData = (startDate, endDate, location) => {
+      const result = data && data.length ? data.filter((val) => {
+        const valDate = new Date(val.date);
+        if (validateData(valDate, val.town, val.weather)) {
+          return valDate >= (new Date(startDate))
+            && valDate <= (new Date(endDate))
+            && location === val.town
+        }
+        return false;
+      }) : [];
+      return result;
+    }
+
     if (startDate && endDate && location && location.length) {
       setWeatherData(filterData(startDate, endDate, location));
     }
