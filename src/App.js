@@ -12,16 +12,22 @@ const App = () => {
   const [location, setLocation] = useState("");
 
 
+  const validateData = (date, town, weather) => {
+    return !isNaN(date.getTime()) &&
+      town && typeof town === 'string' && town.length &&
+      weather && typeof weather === 'string' && weather.length;
+  }
+
   const filterData = (startDate, endDate, location) => {
-    const result = data.filter((val) => {
+    const result = data && data.length ? data.filter((val) => {
       const valDate = new Date(val.date);
-      if (!isNaN(valDate.getTime()) && val.town.length) {
+      if (validateData(valDate, val.town, val.weather)) {
         return valDate >= (new Date(startDate))
           && valDate <= (new Date(endDate))
           && location === val.town
       }
       return false;
-    })
+    }) : [];
     return result;
   }
 
@@ -49,14 +55,15 @@ const App = () => {
       <EditableSection
         startDate={startDate}
         endDate={endDate}
-        location={null}
+        location={location}
         onStartDateChange={onStartDateChange}
         onEndDateChange={onEndDateChange}
         onLocationChange={onLocationChange}
       />
       <div className="editable-section">
-        {weatherData.map((item) => (
+        {weatherData.map((item, index) => (
           <WeatherCard
+            key={`weatherCard-${index}`}
             date={item.date}
             weather={item.weather}
             location={item.location}
